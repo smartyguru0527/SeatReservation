@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title|default:"Reservation" }}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="top-bar-left" aria-hidden="true"></div>
+        <nav class="nav-icons">
+            <a href="{% url 'reservations:seat_reservation' %}" class="nav-icon {% if active_nav == 'seats' %}active{% endif %}" title="Seat Reservation" aria-label="Seats">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M7 9v6M17 9v6M3 12h18"/></svg>
+            </a>
+            <a href="{% url 'reservations:meeting_room_reservation' %}" class="nav-icon {% if active_nav == 'rooms' %}active{% endif %}" title="Meeting Room Reservation" aria-label="Meeting rooms">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 10h20M8 4v4M16 4v4"/></svg>
+            </a>
+        </nav>
+        <div class="top-bar-right">
+            <button type="button" class="btn-suggestion"><span class="btn-suggestion-icon" aria-hidden="true"></span>Suggestion</button>
+        </div>
+    </div>
+    <header class="header">
+        <div class="header-left">
+            <h1 class="header-title">{{ page_title|default:"Reservation" }}</h1>
+            <p class="header-subtitle">{{ page_subtitle|default:"" }}</p>
+        </div>
+        <div class="header-center">
+            <div class="date-nav">
+                <input type="date" id="datePicker" class="date-picker" value="{{ today|date:'Y-m-d' }}">
+                <div class="date-bar">
+                    <button type="button" class="date-arrow" id="datePrev" aria-label="Previous day">‹</button>
+                    <div class="date-bar-center" id="dateBarCenter">
+                        <span class="date-display" id="dateDisplay"></span>
+                        <span class="date-calendar-icon" aria-hidden="true">📅</span>
+                    </div>
+                    <button type="button" class="date-arrow" id="dateNext" aria-label="Next day">›</button>
+                </div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="last-update">
+                <span class="last-update-icon" aria-hidden="true">↻</span>
+                <span>Last Update: <span id="lastUpdate">{{ last_update|default:"" }}</span></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        (function() {
+            var picker = document.getElementById('datePicker');
+            var display = document.getElementById('dateDisplay');
+            if (!picker) return;
+            function formatDisplay(d) {
+                var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+                return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+            }
+            function sync() {
+                var val = picker.value;
+                if (val) {
+                    var d = new Date(val + 'T12:00:00');
+                    display.textContent = formatDisplay(d);
+                }
+            }
+            picker.addEventListener('change', sync);
+            sync();
+            var barCenter = document.getElementById('dateBarCenter');
+            if (display) display.addEventListener('click', function() { picker.click(); });
+            if (barCenter) barCenter.addEventListener('click', function() { picker.click(); });
+            var prev = document.getElementById('datePrev');
+            var next = document.getElementById('dateNext');
+            if (prev) prev.addEventListener('click', function() {
+                var d = new Date(picker.value || new Date());
+                d.setDate(d.getDate() - 1);
+                picker.value = d.toISOString().slice(0, 10);
+                sync();
+                if (typeof onDateChange === 'function') onDateChange(picker.value);
+            });
+            if (next) next.addEventListener('click', function() {
+                var d = new Date(picker.value || new Date());
+                d.setDate(d.getDate() + 1);
+                picker.value = d.toISOString().slice(0, 10);
+                sync();
+                if (typeof onDateChange === 'function') onDateChange(picker.value);
+            });
+        })();
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,541 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>.seat-layout { --reserved-seat-color: {{ reserved_seat_color|default:"#2563eb" }}; }</style>
+<div class="seat-layout">
+    <!-- Left: Overall status + list -->
+    <div class="left-col">
+        <div class="panel panel--header-bordered">
+            <h2 class="panel-title">Overall Seat Reservation Status</h2>
+            <div class="stats">
+                <span>Total <strong id="statTotal">0</strong> Seats</span>
+                <span>Available <strong id="statAvailable">0</strong> Seats</span>
+                <span>Reserved <strong id="statReserved">0</strong> Seats</span>
+            </div>
+            <div class="overall-seat-inner-panel">
+                <div class="overall-seat-visual">
+                    <div class="overall-seat-map">
+                        <div class="overall-full-grid" id="overallFullGrid"></div>
+                        <div class="overall-group-frames" id="overallGroupFrames"></div>
+                        <span class="overall-floor-tag">97 &gt;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel reservation-list-panel">
+            <h2 class="panel-title panel-title--dual">
+                <span class="panel-title-option active">Overall Seat Reservation List</span>
+                <span class="panel-title-option">Overall Suit &amp; Seats</span>
+            </h2>
+            <div class="search-wrap search-wrap--list">
+                <input type="text" id="searchName" placeholder="Search by name or select" aria-label="Search">
+            </div>
+            <div class="reservation-list-wrap">
+                <table class="reservation-table">
+                    <thead>
+                        <tr><th>No</th><th>Name</th><th>Seat Info</th><th>View Location</th></tr>
+                    </thead>
+                    <tbody id="reservationListBody">
+                        <tr><td colspan="4" class="text-muted">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Middle: Select Seat -->
+    <div class="panel panel--header-bordered select-seat-panel">
+        <div class="panel-title-row">
+            <h2 class="panel-title">Select Seat</h2>
+            <button type="button" class="panel-title-edit" aria-label="Edit"><svg class="panel-title-edit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></button>
+        </div>
+        <div class="select-seat-columns">
+            <div class="select-legend">
+                <div class="select-legend-section select-legend-section--types">
+                    <div class="legend-types-row">
+                        <div class="legend-heading legend-heading--available">Available Seats</div>
+                        <div class="legend-list" id="legendSeatTypes"></div>
+                    </div>
+                </div>
+                <div class="select-legend-section select-legend-section--status">
+                    <div class="legend-status-row">
+                        <span class="legend-status-label">Selected Seat</span>
+                        <span class="legend-dot legend-dot--single" style="background:#ef4444"></span>
+                    </div>
+                    <div class="legend-status-row">
+                        <span class="legend-status-label">Reserved Seat</span>
+                        <span class="legend-dot legend-dot--single" style="background:#9ca3af"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="select-seat-grid-wrapper">
+                <div class="seat-grid" id="seatGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: Enter Reservation Info -->
+    <div class="panel panel--header-bordered reservation-form-panel">
+        <h2 class="panel-title">Enter Reservation Info</h2>
+        <img src="{% static 'img/seat-right-illustration.jpg' %}" alt="Team collaborating in the office" class="reservation-illus">
+        <div id="reservationFormPlaceholder">
+            <p>Please select a seat.</p>
+            <p class="hint">Once selected, the reservation information form will appear.</p>
+        </div>
+        <div id="reservationFormBox" style="display:none;">
+            <form id="seatReserveForm">
+                {% csrf_token %}
+                <input type="hidden" name="seat_id" id="formSeatId">
+                <input type="hidden" name="date" id="formDate">
+                <div class="form-group">
+                    <label for="guestName">Your name</label>
+                    <input type="text" id="guestName" name="guest_name" required placeholder="e.g. Tony">
+                </div>
+                <button type="submit" class="btn-quick-start">Confirm reservation</button>
+            </form>
+        </div>
+        <button type="button" class="btn-quick-start" id="btnQuickStart">Quick Start</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    var datePicker = document.getElementById('datePicker');
+    var csrf = document.querySelector('#seatReserveForm [name=csrfmiddlewaretoken]');
+    var formDate = document.getElementById('formDate');
+    var formSeatId = document.getElementById('formSeatId');
+    var guestName = document.getElementById('guestName');
+    var placeholder = document.getElementById('reservationFormPlaceholder');
+    var formBox = document.getElementById('reservationFormBox');
+    var selectedSeatId = null;
+    var selectedZone = null;  // used when selectedRegion is null (block mode)
+    var zoneSeatIds = {1: [], 2: [], 3: []};
+    // initial: 7x7 centered on grid (18 rows, 13 cols -> center row 8, col 6)
+    var selectedRegion = { rowStart: 5, rowEnd: 11, colStart: 3, colEnd: 9 };
+
+    function selectRegionAt(rowIdx, colIdx) {
+        var size = 7;
+        var half = (size - 1) / 2;  // 3
+        selectedRegion = {
+            rowStart: Math.max(0, rowIdx - half),
+            rowEnd: Math.min(17, rowIdx + half),
+            colStart: Math.max(0, colIdx - half),
+            colEnd: Math.min(12, colIdx + half)
+        };
+        selectedZone = null;
+        loadSeatGrid();
+    }
+
+    function updateMiniMapFrames() {
+        var framesWrap = document.getElementById('overallGroupFrames');
+        if (!framesWrap) return;
+        var blockConfigs = window.blockConfigs || [];
+        framesWrap.innerHTML = '';
+        var totalCols = 13;
+        var totalRows = 18;
+        var gapPct = 2.5;
+        var numColGaps = totalCols - 1;
+        var numRowGaps = totalRows - 1;
+        var colWidthPct = (100 - numColGaps * gapPct) / totalCols;
+        var rowHeightPct = (100 - numRowGaps * gapPct) / totalRows;
+        var colSlotPct = colWidthPct + gapPct;
+        var rowSlotPct = rowHeightPct + gapPct;
+
+        var gridEl = document.getElementById('overallFullGrid');
+        var rect = gridEl ? gridEl.getBoundingClientRect() : framesWrap.getBoundingClientRect();
+        var W = rect.width;
+        var H = rect.height;
+
+        function drawFrame(rowStartIdx, rowEndIdx, colStartIdx, colEndIdx, className, borderColor, expandFactor) {
+            var frame = document.createElement('div');
+            frame.className = 'overall-group-frame ' + (className || '');
+            if (borderColor) frame.style.borderColor = borderColor;
+
+            var rowSpan = rowEndIdx - rowStartIdx + 1;
+            var colSpan = colEndIdx - colStartIdx + 1;
+            var leftPx = (colStartIdx * colSlotPct / 100) * W;
+            var topPx = (rowStartIdx * rowSlotPct / 100) * H;
+            var widthPx = (colSpan * colWidthPct / 100 + (colSpan - 1) * gapPct / 100) * W;
+            var heightPx = (rowSpan * rowHeightPct / 100 + (rowSpan - 1) * gapPct / 100) * H;
+            var expandPx = Math.min(W, H) * (expandFactor !== undefined ? expandFactor : 0.06);
+            leftPx = leftPx - expandPx / 2;
+            topPx = topPx - expandPx / 2;
+            widthPx += expandPx;
+            heightPx += expandPx;
+            frame.style.left = leftPx + 'px';
+            frame.style.top = topPx + 'px';
+            frame.style.width = widthPx + 'px';
+            frame.style.height = heightPx + 'px';
+            framesWrap.appendChild(frame);
+        }
+
+        (blockConfigs || []).forEach(function(cfg) {
+            var rowStartIdx = cfg.row_start.charCodeAt(0) - 'A'.charCodeAt(0);
+            var rowEndIdx = cfg.row_end.charCodeAt(0) - 'A'.charCodeAt(0);
+            var colStartIdx = cfg.col_start - 1;
+            var colEndIdx = cfg.col_end - 1;
+            drawFrame(rowStartIdx, rowEndIdx, colStartIdx, colEndIdx,
+                'overall-group-frame-' + cfg.index + (cfg.index === selectedZone && !selectedRegion ? ' overall-group-frame-selected' : ''),
+                (cfg.color && (cfg.index !== selectedZone || selectedRegion)) ? cfg.color : null);
+        });
+        if (selectedRegion) {
+            drawFrame(selectedRegion.rowStart, selectedRegion.rowEnd, selectedRegion.colStart, selectedRegion.colEnd, 'overall-region-frame-selected', null, 0.04);
+        }
+    }
+
+    function getDate() { return datePicker ? datePicker.value : new Date().toISOString().slice(0,10); }
+
+    function onDateChange() {
+        formDate.value = getDate();
+        loadSeatStatus();
+        loadSeatGrid();
+    }
+    window.onDateChange = onDateChange;
+
+    function loadSeatStatus() {
+        var date = getDate();
+        fetch('/api/seat-status/?date=' + encodeURIComponent(date))
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                document.getElementById('statTotal').textContent = data.total;
+                document.getElementById('statAvailable').textContent = data.available;
+                document.getElementById('statReserved').textContent = data.reserved;
+                var tbody = document.getElementById('reservationListBody');
+                tbody.innerHTML = data.reservations.length === 0
+                    ? '<tr><td colspan="4">No reservations for this date.</td></tr>'
+                    : data.reservations.map(function(r) {
+                        return '<tr><td>' + r.no + '</td><td>' + r.name + '</td><td>' + r.seat_info + '</td><td><button type="button" class="btn-check" data-seat-id="' + r.seat_id + '">Check Location</button></td></tr>';
+                    }).join('');
+                window.reservedSeatIds = data.reserved_seat_ids || [];
+                window.blockConfigs = data.blocks || [];
+                loadSeatGrid();
+            });
+    }
+
+    function loadSeatGrid() {
+        fetch('/api/seat-grid/')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var legend = document.getElementById('legendSeatTypes');
+                legend.innerHTML = (data.seat_types || []).map(function(st) {
+                    return '<span class="legend-item"><span class="legend-dot" style="background:' + st.color + '"></span> ' + st.name + '</span>';
+                }).join('');
+                var grid = document.getElementById('seatGrid');
+                var reserved = window.reservedSeatIds || [];
+                var activeZoneIds = zoneSeatIds[selectedZone] || [];
+                var blockConfigs = window.blockConfigs || [];
+
+                // lookup for all seats
+                var byRowAll = {};
+                window.seatIdToPosition = {};
+                (data.grid || []).forEach(function(row) {
+                    row.seats.forEach(function(s) {
+                        var col = parseInt(s.number, 10);
+                        if (!byRowAll[row.row]) byRowAll[row.row] = {};
+                        byRowAll[row.row][col] = s;
+                        window.seatIdToPosition[s.id] = { row: row.row, col: col };
+                    });
+                });
+
+                // lookup restricted to active zone or 7x7 region for center grid
+                var byRow = {};
+                var blockRows = [];
+                var blockCols = [];
+                var emptyRows = ['B','E','H','K'];
+                var skipCols = [5,10];
+
+                if (selectedRegion) {
+                    // 7x7 region: filter by row & col range
+                    var rowStartCode = 'A'.charCodeAt(0) + selectedRegion.rowStart;
+                    var rowEndCode = 'A'.charCodeAt(0) + selectedRegion.rowEnd;
+                    for (var code = rowStartCode; code <= rowEndCode; code++) {
+                        blockRows.push(String.fromCharCode(code));
+                    }
+                    for (var c = selectedRegion.colStart + 1; c <= selectedRegion.colEnd + 1; c++) {
+                        blockCols.push(c);
+                    }
+                    Object.keys(byRowAll).forEach(function(r) {
+                        var rowIdx = r.charCodeAt(0) - 'A'.charCodeAt(0);
+                        if (rowIdx < selectedRegion.rowStart || rowIdx > selectedRegion.rowEnd) return;
+                        Object.keys(byRowAll[r]).forEach(function(colKey) {
+                            var colNum = parseInt(colKey, 10);
+                            if (colNum < selectedRegion.colStart + 1 || colNum > selectedRegion.colEnd + 1) return;
+                            var seat = byRowAll[r][colKey];
+                            if (!byRow[r]) byRow[r] = {};
+                            byRow[r][colNum] = seat;
+                        });
+                    });
+                } else {
+                    // Block mode: use selectedZone
+                    Object.keys(byRowAll).forEach(function(r) {
+                        Object.keys(byRowAll[r]).forEach(function(colKey) {
+                            var seat = byRowAll[r][colKey];
+                            if (activeZoneIds.length && activeZoneIds.indexOf(seat.id) === -1) return;
+                            if (!byRow[r]) byRow[r] = {};
+                            byRow[r][parseInt(colKey, 10)] = seat;
+                        });
+                    });
+                    var cfg = null;
+                    blockConfigs.forEach(function(b) {
+                        if (b.index === selectedZone) cfg = b;
+                    });
+                    if (cfg) {
+                        var startCode = cfg.row_start.charCodeAt(0);
+                        var endCode = cfg.row_end.charCodeAt(0);
+                        for (var code = startCode; code <= endCode; code++) {
+                            blockRows.push(String.fromCharCode(code));
+                        }
+                        for (var c = cfg.col_start; c <= cfg.col_end; c++) {
+                            blockCols.push(c);
+                        }
+                    }
+                }
+
+                // --- mini map  ---
+                var full = document.getElementById('overallFullGrid');
+                var framesWrap = document.getElementById('overallGroupFrames');
+                if (full) {
+                    full.innerHTML = '';
+                    var allRowsMini = [];
+                    for (var codeAll = 'A'.charCodeAt(0); codeAll <= 'R'.charCodeAt(0); codeAll++) {
+                        allRowsMini.push(String.fromCharCode(codeAll));
+                    }
+                    var allColsMini = [];
+                    for (var colAll = 1; colAll <= 13; colAll++) {
+                        allColsMini.push(colAll);
+                    }
+                    allRowsMini.forEach(function(r, rowIdx) {
+                        allColsMini.forEach(function(c, colIdx) {
+                            var seat = (byRowAll[r] || {})[c];
+                            var cell = document.createElement('div');
+                            cell.className = 'overall-full-cell';
+                            cell.dataset.rowIdx = rowIdx;
+                            cell.dataset.colIdx = colIdx;
+
+                            var groupIndex = null;
+                            (blockConfigs || []).forEach(function(cfg) {
+                                if (cfg.row_start <= r && r <= cfg.row_end &&
+                                    cfg.col_start <= c && c <= cfg.col_end) {
+                                    if (groupIndex === null || cfg.index < groupIndex) {
+                                        groupIndex = cfg.index;
+                                    }
+                                }
+                            });
+                            var blockCfg = null;
+                            if (groupIndex !== null) {
+                                cell.classList.add('group-' + groupIndex);
+                                blockCfg = (blockConfigs || []).find(function(c) { return c.index === groupIndex; });
+                            }
+
+                            if (seat) {
+                                if (reserved.indexOf(seat.id) !== -1) {
+                                    cell.classList.add('reserved');
+                                } else {
+                                    cell.classList.add('has-seat');
+                                    if (blockCfg && blockCfg.color) cell.style.background = blockCfg.color;
+                                }
+                            }
+                            if (selectedRegion && rowIdx >= selectedRegion.rowStart && rowIdx <= selectedRegion.rowEnd &&
+                                colIdx >= selectedRegion.colStart && colIdx <= selectedRegion.colEnd) {
+                                cell.classList.add('in-selected-region');
+                            }
+                            full.appendChild(cell);
+                        });
+                    });
+                    full.style.cursor = 'pointer';
+                    if (!full._regionClickBound) {
+                        full._regionClickBound = true;
+                        full.addEventListener('click', function(ev) {
+                            var cell = ev.target.closest('.overall-full-cell');
+                            if (!cell || !cell.dataset.rowIdx) return;
+                            var rowIdx = parseInt(cell.dataset.rowIdx, 10);
+                            var colIdx = parseInt(cell.dataset.colIdx, 10);
+                            if (!isNaN(rowIdx) && !isNaN(colIdx)) selectRegionAt(rowIdx, colIdx);
+                        });
+                    }
+                }
+
+                updateMiniMapFrames();
+
+                // --- Render center grid for selected block ---
+                grid.innerHTML = '';
+                blockRows.forEach(function(r) {
+                    var rowEl = document.createElement('div');
+                    rowEl.className = 'seat-row';
+                    var hasAnyInRow = false;
+
+                    blockCols.forEach(function(c) {
+                        if (skipCols.indexOf(c) !== -1) {
+                            // Explicit empty column -> spacer cell (even for empty rows)
+                            var gapCell = document.createElement('button');
+                            gapCell.type = 'button';
+                            gapCell.className = 'seat-cell gap';
+                            gapCell.textContent = '';
+                            rowEl.appendChild(gapCell);
+                            hasAnyInRow = true;
+                            return;
+                        }
+
+                        // For empty rows, always render
+                        if (emptyRows.indexOf(r) !== -1) {
+                            var emptyCell = document.createElement('button');
+                            emptyCell.type = 'button';
+                            emptyCell.className = 'seat-cell gap';
+                            emptyCell.textContent = '';
+                            rowEl.appendChild(emptyCell);
+                            hasAnyInRow = true;
+                            return;
+                        }
+
+                        var seat = (byRow[r] || {})[c];
+                        var cell = document.createElement('button');
+                        cell.type = 'button';
+                        cell.className = 'seat-cell';
+                        if (!seat || !seat.is_active) {
+                            cell.classList.add('gap');
+                            cell.textContent = '';
+                        } else {
+                            hasAnyInRow = true;
+                            cell.textContent = seat.label;
+                            cell.dataset.seatId = seat.id;
+                            if (reserved.indexOf(seat.id) !== -1) cell.classList.add('reserved');
+                            else {
+                                cell.classList.add('available');
+                                cell.addEventListener('click', function() {
+                                    document.querySelectorAll('.seat-cell.selected').forEach(function(cel) { cel.classList.remove('selected'); });
+                                    this.classList.add('selected');
+                                    selectedSeatId = seat.id;
+                                    formSeatId.value = seat.id;
+                                    formDate.value = getDate();
+                                    placeholder.style.display = 'none';
+                                    formBox.style.display = 'block';
+                                });
+                            }
+                        }
+                        rowEl.appendChild(cell);
+                    });
+
+                    if (hasAnyInRow) {
+                        grid.appendChild(rowEl);
+                    }
+                });
+
+                // If Check Location requested focus on a seat, scroll it to center and select it
+                var focusSeatId = window.focusSeatIdAfterLoad;
+                if (focusSeatId) {
+                    window.focusSeatIdAfterLoad = null;
+                    var focusCell = grid.querySelector('.seat-cell[data-seat-id="' + focusSeatId + '"]');
+                    if (focusCell) {
+                        document.querySelectorAll('.seat-cell.selected').forEach(function(c) { c.classList.remove('selected'); });
+                        focusCell.classList.add('selected');
+                        selectedSeatId = focusSeatId;
+                        formSeatId.value = focusSeatId;
+                        formDate.value = getDate();
+                        placeholder.style.display = 'none';
+                        formBox.style.display = 'block';
+                        focusCell.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                    }
+                }
+
+                // --- Render mini blocks on the left to match the same layout ---
+                (blockConfigs || []).forEach(function(cfg) {
+                    var el = document.getElementById('zoneGrid-' + cfg.index);
+                    if (!el) return;
+                    el.innerHTML = '';
+
+                    var zRows = [];
+                    var startCodeZ = cfg.row_start.charCodeAt(0);
+                    var endCodeZ = cfg.row_end.charCodeAt(0);
+                    for (var rc = startCodeZ; rc <= endCodeZ; rc++) {
+                        zRows.push(String.fromCharCode(rc));
+                    }
+                    var zCols = [];
+                    for (var cc = cfg.col_start; cc <= cfg.col_end; cc++) {
+                        zCols.push(cc);
+                    }
+
+                    zRows.forEach(function(r) {
+                        zCols.forEach(function(c) {
+                            var seat = (byRowAll[r] || {})[c];
+                            var cell = document.createElement('div');
+                            cell.className = 'overall-zone-cell';
+                            if (seat && emptyRows.indexOf(r) === -1) {
+                                if (reserved.indexOf(seat.id) !== -1) {
+                                    cell.classList.add('reserved');
+                                } else {
+                                    cell.classList.add('has-seat');
+                                }
+                            }
+                            el.appendChild(cell);
+                        });
+                    });
+                });
+            });
+    }
+
+    document.body.addEventListener('click', function(ev) {
+        var btn = ev.target.closest('.btn-check');
+        if (!btn) return;
+        var seatId = btn.getAttribute('data-seat-id');
+        if (!seatId) return;
+        var pos = window.seatIdToPosition && window.seatIdToPosition[seatId];
+        if (!pos) {
+            fetch('/api/seat-grid/').then(function(r) { return r.json(); }).then(function(data) {
+                window.seatIdToPosition = {};
+                (data.grid || []).forEach(function(row) {
+                    row.seats.forEach(function(s) {
+                        window.seatIdToPosition[s.id] = { row: row.row, col: parseInt(s.number, 10) };
+                    });
+                });
+                pos = window.seatIdToPosition[seatId];
+                if (pos) checkLocationGoToSeat(seatId, pos);
+                else alert('Seat not found.');
+            });
+            return;
+        }
+        checkLocationGoToSeat(seatId, pos);
+    });
+
+    function checkLocationGoToSeat(seatId, pos) {
+        var rowIdx = pos.row.charCodeAt(0) - 'A'.charCodeAt(0);
+        var colIdx = pos.col - 1;
+        selectRegionAt(rowIdx, colIdx);
+        window.focusSeatIdAfterLoad = seatId;
+        loadSeatGrid();
+    }
+
+    document.getElementById('seatReserveForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!selectedSeatId || !guestName.value.trim()) return;
+        var fd = new FormData(this);
+        fd.append('seat_id', selectedSeatId);
+        fd.append('date', getDate());
+        fd.append('guest_name', guestName.value.trim());
+        fetch('/api/seat-reserve/', { method: 'POST', body: fd, headers: { 'X-CSRFToken': csrf ? csrf.value : '' } })
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+                if (res.ok) { loadSeatStatus(); formBox.style.display = 'none'; placeholder.style.display = 'block'; guestName.value = ''; selectedSeatId = null; document.querySelectorAll('.seat-cell.selected').forEach(function(c) { c.classList.remove('selected'); }); }
+                else alert(res.error || 'Failed');
+            });
+    });
+
+    document.getElementById('btnQuickStart').addEventListener('click', function() {
+        if (selectedSeatId && guestName.value.trim()) document.getElementById('seatReserveForm').requestSubmit();
+        else alert('Please select a seat and enter your name.');
+    });
+
+    formDate.value = getDate();
+    loadSeatStatus();
+
+    var resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(updateMiniMapFrames, 80);
+    });
+
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="room-layout">
+    <!-- Left: Meeting room schedule -->
+    <div class="panel schedule-wrap">
+        <h2 class="panel-title">Overall Meeting Room Status</h2>
+        <table class="schedule-table" id="scheduleTable">
+            <thead>
+                <tr>
+                    <th>Room</th>
+                    <th class="time-cell">08:00</th>
+                    <th class="time-cell">09:00</th>
+                    <th class="time-cell">10:00</th>
+                    <th class="time-cell">11:00</th>
+                    <th class="time-cell">12:00</th>
+                    <th class="time-cell">13:00</th>
+                    <th class="time-cell">14:00</th>
+                    <th class="time-cell">15:00</th>
+                    <th class="time-cell">16:00</th>
+                    <th class="time-cell">17:00</th>
+                </tr>
+            </thead>
+            <tbody id="scheduleBody">
+                <tr><td colspan="10">Loading…</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Right: Enter Reservation Info -->
+    <div class="panel panel--header-bordered reservation-form-panel">
+        <h2 class="panel-title">Enter Reservation Info</h2>
+        <img src="{% static 'img/meeting_room_reservation.jpg' %}" alt="Meeting room" class="reservation-illus">
+        <div id="roomFormPlaceholder">
+            <p>Please select a meeting room.</p>
+            <p class="hint">Select an available time slot from the left or click the 'Quick Start' button below to book a meeting room.</p>
+        </div>
+        <div id="roomFormBox" style="display:none;">
+            <form id="roomReserveForm">
+                {% csrf_token %}
+                <input type="hidden" name="room_id" id="roomFormRoomId">
+                <input type="hidden" name="date" id="roomFormDate">
+                <div class="form-group">
+                    <label for="roomGuestName">Your name</label>
+                    <input type="text" id="roomGuestName" name="guest_name" required placeholder="e.g. Tony">
+                </div>
+                <div class="form-group">
+                    <label for="roomTitle">Meeting title (optional)</label>
+                    <input type="text" id="roomTitle" name="title" placeholder="Briefing">
+                </div>
+                <div class="form-group">
+                    <label for="roomStart">Start time</label>
+                    <input type="time" id="roomStart" name="start_time" value="09:00">
+                </div>
+                <div class="form-group">
+                    <label for="roomEnd">End time</label>
+                    <input type="time" id="roomEnd" name="end_time" value="10:00">
+                </div>
+                <button type="submit" class="btn-quick-start">Confirm reservation</button>
+            </form>
+        </div>
+        <button type="button" class="btn-quick-start" id="btnRoomQuickStart">Quick Start</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    var datePicker = document.getElementById('datePicker');
+    var csrf = document.querySelector('#roomReserveForm [name=csrfmiddlewaretoken]');
+    var scheduleBody = document.getElementById('scheduleBody');
+    var roomFormDate = document.getElementById('roomFormDate');
+    var roomFormRoomId = document.getElementById('roomFormRoomId');
+    var placeholder = document.getElementById('roomFormPlaceholder');
+    var formBox = document.getElementById('roomFormBox');
+    var HOURS = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
+
+    function getDate() { return datePicker ? datePicker.value : new Date().toISOString().slice(0,10); }
+
+    function onDateChange() {
+        roomFormDate.value = getDate();
+        loadSchedule();
+    }
+    window.onDateChange = onDateChange;
+
+    function loadSchedule() {
+        var date = getDate();
+        fetch('/api/room-schedule/?date=' + encodeURIComponent(date))
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                roomFormDate.value = data.date;
+                var html = '';
+                (data.rooms || []).forEach(function(room) {
+                    var row = '<tr><td class="room-name"><span class="room-dot" style="background:' + room.color + '"></span>' + room.name + ' <span style="color:#6b7280;font-size:0.8em">(' + room.capacity + ' Seats)</span></td>';
+                    HOURS.forEach(function(h) {
+                        var slot = room.slots.find(function(s) {
+                            return s.start <= h && s.end > h;
+                        });
+                        if (slot) {
+                            row += '<td class="time-cell booked">' + (slot.start === h ? '<div class="slot-block">' + slot.guest_name + (slot.title ? ' – ' + slot.title : '') + '</div>' : '') + '</td>';
+                        } else {
+                            row += '<td class="time-cell" data-room-id="' + room.id + '" data-time="' + h + '"></td>';
+                        }
+                    });
+                    row += '</tr>';
+                    html += row;
+                });
+                scheduleBody.innerHTML = html || '<tr><td colspan="10">No rooms configured. Add rooms in Django admin.</td></tr>';
+                scheduleBody.querySelectorAll('.time-cell[data-room-id]').forEach(function(cell) {
+                    cell.addEventListener('click', function() {
+                        var roomId = this.dataset.roomId;
+                        var time = this.dataset.time;
+                        if (!roomId || !time) return;
+                        roomFormRoomId.value = roomId;
+                        roomFormDate.value = getDate();
+                        document.getElementById('roomStart').value = time;
+                        var endHour = parseInt(time, 10) + 1;
+                        document.getElementById('roomEnd').value = (endHour < 10 ? '0' : '') + endHour + ':00';
+                        placeholder.style.display = 'none';
+                        formBox.style.display = 'block';
+                    });
+                });
+            });
+    }
+
+    document.getElementById('roomReserveForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var fd = new FormData(this);
+        fd.append('room_id', roomFormRoomId.value);
+        fd.append('date', getDate());
+        fd.append('guest_name', document.getElementById('roomGuestName').value.trim());
+        fd.append('title', document.getElementById('roomTitle').value.trim());
+        fd.append('start_time', document.getElementById('roomStart').value);
+        fd.append('end_time', document.getElementById('roomEnd').value);
+        fetch('/api/room-reserve/', { method: 'POST', body: fd, headers: { 'X-CSRFToken': csrf ? csrf.value : '' } })
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+                if (res.ok) { loadSchedule(); formBox.style.display = 'none'; placeholder.style.display = 'block'; roomFormRoomId.value = ''; }
+                else alert(res.error || 'Failed');
+            });
+    });
+
+    document.getElementById('btnRoomQuickStart').addEventListener('click', function() {
+        if (roomFormRoomId.value && document.getElementById('roomGuestName').value.trim())
+            document.getElementById('roomReserveForm').requestSubmit();
+        else {
+            placeholder.style.display = 'none';
+            formBox.style.display = 'block';
+            roomFormDate.value = getDate();
+        }
+    });
+
+    roomFormDate.value = getDate();
+    loadSchedule();
+})();
+</script>
+{% endblock %}
