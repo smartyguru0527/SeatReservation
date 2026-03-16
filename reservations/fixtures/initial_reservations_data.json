@@ -1,0 +1,117 @@
+[
+  {
+    "model": "reservations.seattype",
+    "pk": 1,
+    "fields": {
+      "name": "Motion desk",
+      "color": "#14b8a6",
+      "order": 1
+    }
+  },
+  {
+    "model": "reservations.seattype",
+    "pk": 2,
+    "fields": {
+      "name": "Work station",
+      "color": "#0ea5e9",
+      "order": 2
+    }
+  },
+  {
+    "model": "reservations.seattype",
+    "pk": 3,
+    "fields": {
+      "name": "Mobile desk",
+      "color": "#f97316",
+      "order": 3
+    }
+  },
+  {
+    "model": "reservations.seattype",
+    "pk": 4,
+    "fields": {
+      "name": "Standard seat",
+      "color": "#a3a3a3",
+      "order": 4
+    }
+  },
+
+  {
+    "model": "reservations.seatblock",
+    "pk": 1,
+    "fields": {
+      "name": "Front Left",
+      "order": 1,
+      "row_start": "A",
+      "row_end": "D",
+      "col_start": 1,
+      "col_end": 6,
+      "color": "#a7f3d0"
+    }
+  },
+  {
+    "model": "reservations.seatblock",
+    "pk": 2,
+    "fields": {
+      "name": "Front Right",
+      "order": 2,
+      "row_start": "A",
+      "row_end": "D",
+      "col_start": 7,
+      "col_end": 12,
+      "color": "#bbf7d0"
+    }
+  },
+  {
+    "model": "reservations.seatblock",
+    "pk": 3,
+    "fields": {
+      "name": "Back",
+      "order": 3,
+      "row_start": "E",
+      "row_end": "J",
+      "col_start": 1,
+      "col_end": 12,
+      "color": "#dcfce7"
+    }
+  },
+
+  {
+    "model": "reservations.reservationdisplaysetting",
+    "pk": 1,
+    "fields": {
+      "reserved_seat_color": "#2563eb"
+    }
+  },
+
+  {
+    "model": "reservations.meetingroom",
+    "pk": 1,
+    "fields": {
+      "name": "Alpha",
+      "capacity": 4,
+      "color": "#8b5cf6",
+      "order": 1
+    }
+  },
+  {
+    "model": "reservations.meetingroom",
+    "pk": 2,
+    "fields": {
+      "name": "Beta",
+      "capacity": 6,
+      "color": "#ec4899",
+      "order": 2
+    }
+  },
+  {
+    "model": "reservations.meetingroom",
+    "pk": 3,
+    "fields": {
+      "name": "Gamma",
+      "capacity": 10,
+      "color": "#22c55e",
+      "order": 3
+    }
+  }
+]
