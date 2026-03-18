@@ -244,8 +244,6 @@
                 var byRow = {};
                 var blockRows = [];
                 var blockCols = [];
-                var emptyRows = ['B','E','H','K'];
-                var skipCols = [5,10];
 
                 if (selectedRegion) {
                     // 7x7 region: filter by row & col range
@@ -330,7 +328,7 @@
                                 blockCfg = (blockConfigs || []).find(function(c) { return c.index === groupIndex; });
                             }
 
-                            if (seat) {
+                            if (seat && seat.is_active) {
                                 if (reserved.indexOf(seat.id) !== -1) {
                                     cell.classList.add('reserved');
                                 } else {
@@ -365,31 +363,8 @@
                 blockRows.forEach(function(r) {
                     var rowEl = document.createElement('div');
                     rowEl.className = 'seat-row';
-                    var hasAnyInRow = false;
 
                     blockCols.forEach(function(c) {
-                        if (skipCols.indexOf(c) !== -1) {
-                            // Explicit empty column -> spacer cell (even for empty rows)
-                            var gapCell = document.createElement('button');
-                            gapCell.type = 'button';
-                            gapCell.className = 'seat-cell gap';
-                            gapCell.textContent = '';
-                            rowEl.appendChild(gapCell);
-                            hasAnyInRow = true;
-                            return;
-                        }
-
-                        // For empty rows, always render
-                        if (emptyRows.indexOf(r) !== -1) {
-                            var emptyCell = document.createElement('button');
-                            emptyCell.type = 'button';
-                            emptyCell.className = 'seat-cell gap';
-                            emptyCell.textContent = '';
-                            rowEl.appendChild(emptyCell);
-                            hasAnyInRow = true;
-                            return;
-                        }
-
                         var seat = (byRow[r] || {})[c];
                         var cell = document.createElement('button');
                         cell.type = 'button';
@@ -398,7 +373,6 @@
                             cell.classList.add('gap');
                             cell.textContent = '';
                         } else {
-                            hasAnyInRow = true;
                             cell.textContent = seat.label;
                             cell.dataset.seatId = seat.id;
                             if (reserved.indexOf(seat.id) !== -1) cell.classList.add('reserved');
@@ -418,9 +392,7 @@
                         rowEl.appendChild(cell);
                     });
 
-                    if (hasAnyInRow) {
-                        grid.appendChild(rowEl);
-                    }
+                    grid.appendChild(rowEl);
                 });
 
                 // If Check Location requested focus on a seat, scroll it to center and select it
@@ -462,7 +434,7 @@
                             var seat = (byRowAll[r] || {})[c];
                             var cell = document.createElement('div');
                             cell.className = 'overall-zone-cell';
-                            if (seat && emptyRows.indexOf(r) === -1) {
+                            if (seat && seat.is_active) {
                                 if (reserved.indexOf(seat.id) !== -1) {
                                     cell.classList.add('reserved');
                                 } else {
