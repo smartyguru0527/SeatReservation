@@ -35,7 +35,6 @@
       "order": 4
     }
   },
-
   {
     "model": "reservations.seatblock",
     "pk": 1,
@@ -43,39 +42,51 @@
       "name": "Front Left",
       "order": 1,
       "row_start": "A",
-      "row_end": "D",
+      "row_end": "F",
       "col_start": 1,
-      "col_end": 6,
-      "color": "#a7f3d0"
+      "col_end": 4,
+      "color": "#C6DFCA"
     }
   },
   {
     "model": "reservations.seatblock",
     "pk": 2,
     "fields": {
-      "name": "Front Right",
+      "name": "Front Center",
       "order": 2,
       "row_start": "A",
-      "row_end": "D",
-      "col_start": 7,
-      "col_end": 12,
-      "color": "#bbf7d0"
+      "row_end": "J",
+      "col_start": 6,
+      "col_end": 9,
+      "color": "#B7D4D8"
     }
   },
   {
     "model": "reservations.seatblock",
     "pk": 3,
     "fields": {
-      "name": "Back",
+      "name": "Front Right",
       "order": 3,
-      "row_start": "E",
-      "row_end": "J",
-      "col_start": 1,
-      "col_end": 12,
-      "color": "#dcfce7"
+      "row_start": "A",
+      "row_end": "M",
+      "col_start": 11,
+      "col_end": 13,
+      "color": "#BFC8D7"
     }
   },
-
+  {
+    "model": "reservations.seatblock",
+    "pk": 4,
+    "fields": {
+      "name": "Back",
+      "order": 3,
+      "row_start": "M",
+      "row_end": "R",
+      "col_start": 5,
+      "col_end": 9,
+      "color": "#D9E5BD"
+    }
+  },  
   {
     "model": "reservations.reservationdisplaysetting",
     "pk": 1,
@@ -83,7 +94,6 @@
       "reserved_seat_color": "#2563eb"
     }
   },
-
   {
     "model": "reservations.meetingroom",
     "pk": 1,
@@ -112,6 +122,2346 @@
       "capacity": 10,
       "color": "#22c55e",
       "order": 3
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 1,
+    "fields": {
+      "row": "A",
+      "number": "1",
+      "seat_type": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 2,
+    "fields": {
+      "row": "A",
+      "number": "2",
+      "seat_type": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 3,
+    "fields": {
+      "row": "A",
+      "number": "3",
+      "seat_type": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 4,
+    "fields": {
+      "row": "A",
+      "number": "4",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 5,
+    "fields": {
+      "row": "A",
+      "number": "5",
+      "seat_type": 2,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 6,
+    "fields": {
+      "row": "A",
+      "number": "6",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 7,
+    "fields": {
+      "row": "A",
+      "number": "7",
+      "seat_type": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 8,
+    "fields": {
+      "row": "A",
+      "number": "8",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 9,
+    "fields": {
+      "row": "A",
+      "number": "9",
+      "seat_type": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 10,
+    "fields": {
+      "row": "A",
+      "number": "10",
+      "seat_type": 1,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 11,
+    "fields": {
+      "row": "A",
+      "number": "11",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 12,
+    "fields": {
+      "row": "A",
+      "number": "12",
+      "seat_type": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 13,
+    "fields": {
+      "row": "A",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 14,
+    "fields": {
+      "row": "B",
+      "number": "1",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 15,
+    "fields": {
+      "row": "B",
+      "number": "2",
+      "seat_type": 2,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 16,
+    "fields": {
+      "row": "B",
+      "number": "3",
+      "seat_type": 1,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 17,
+    "fields": {
+      "row": "B",
+      "number": "4",
+      "seat_type": 3,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 18,
+    "fields": {
+      "row": "B",
+      "number": "5",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 19,
+    "fields": {
+      "row": "B",
+      "number": "6",
+      "seat_type": 2,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 20,
+    "fields": {
+      "row": "B",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 21,
+    "fields": {
+      "row": "B",
+      "number": "8",
+      "seat_type": 1,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 22,
+    "fields": {
+      "row": "B",
+      "number": "9",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 23,
+    "fields": {
+      "row": "B",
+      "number": "10",
+      "seat_type": 2,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 24,
+    "fields": {
+      "row": "B",
+      "number": "11",
+      "seat_type": 3,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 25,
+    "fields": {
+      "row": "B",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 26,
+    "fields": {
+      "row": "B",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 27,
+    "fields": {
+      "row": "C",
+      "number": "1",
+      "seat_type": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 28,
+    "fields": {
+      "row": "C",
+      "number": "2",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 29,
+    "fields": {
+      "row": "C",
+      "number": "3",
+      "seat_type": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 30,
+    "fields": {
+      "row": "C",
+      "number": "4",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 31,
+    "fields": {
+      "row": "C",
+      "number": "5",
+      "seat_type": 3,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 32,
+    "fields": {
+      "row": "C",
+      "number": "6",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 33,
+    "fields": {
+      "row": "C",
+      "number": "7",
+      "seat_type": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 34,
+    "fields": {
+      "row": "C",
+      "number": "8",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 35,
+    "fields": {
+      "row": "C",
+      "number": "9",
+      "seat_type": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 36,
+    "fields": {
+      "row": "C",
+      "number": "10",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 37,
+    "fields": {
+      "row": "C",
+      "number": "11",
+      "seat_type": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 38,
+    "fields": {
+      "row": "C",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 39,
+    "fields": {
+      "row": "C",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 40,
+    "fields": {
+      "row": "D",
+      "number": "1",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 41,
+    "fields": {
+      "row": "D",
+      "number": "2",
+      "seat_type": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 42,
+    "fields": {
+      "row": "D",
+      "number": "3",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 43,
+    "fields": {
+      "row": "D",
+      "number": "4",
+      "seat_type": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 44,
+    "fields": {
+      "row": "D",
+      "number": "5",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 45,
+    "fields": {
+      "row": "D",
+      "number": "6",
+      "seat_type": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 46,
+    "fields": {
+      "row": "D",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 47,
+    "fields": {
+      "row": "D",
+      "number": "8",
+      "seat_type": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 48,
+    "fields": {
+      "row": "D",
+      "number": "9",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 49,
+    "fields": {
+      "row": "D",
+      "number": "10",
+      "seat_type": 2,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 50,
+    "fields": {
+      "row": "D",
+      "number": "11",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 51,
+    "fields": {
+      "row": "D",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 52,
+    "fields": {
+      "row": "D",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 53,
+    "fields": {
+      "row": "E",
+      "number": "1",
+      "seat_type": 1,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 54,
+    "fields": {
+      "row": "E",
+      "number": "2",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 55,
+    "fields": {
+      "row": "E",
+      "number": "3",
+      "seat_type": 2,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 56,
+    "fields": {
+      "row": "E",
+      "number": "4",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 57,
+    "fields": {
+      "row": "E",
+      "number": "5",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 58,
+    "fields": {
+      "row": "E",
+      "number": "6",
+      "seat_type": 3,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 59,
+    "fields": {
+      "row": "E",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 60,
+    "fields": {
+      "row": "E",
+      "number": "8",
+      "seat_type": 2,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 61,
+    "fields": {
+      "row": "E",
+      "number": "9",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 62,
+    "fields": {
+      "row": "E",
+      "number": "10",
+      "seat_type": 1,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 63,
+    "fields": {
+      "row": "E",
+      "number": "11",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 64,
+    "fields": {
+      "row": "E",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 65,
+    "fields": {
+      "row": "E",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 66,
+    "fields": {
+      "row": "F",
+      "number": "1",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 67,
+    "fields": {
+      "row": "F",
+      "number": "2",
+      "seat_type": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 68,
+    "fields": {
+      "row": "F",
+      "number": "3",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 69,
+    "fields": {
+      "row": "F",
+      "number": "4",
+      "seat_type": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 70,
+    "fields": {
+      "row": "F",
+      "number": "5",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 71,
+    "fields": {
+      "row": "F",
+      "number": "6",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 72,
+    "fields": {
+      "row": "F",
+      "number": "7",
+      "seat_type": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 73,
+    "fields": {
+      "row": "F",
+      "number": "8",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 74,
+    "fields": {
+      "row": "F",
+      "number": "9",
+      "seat_type": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 75,
+    "fields": {
+      "row": "F",
+      "number": "10",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 76,
+    "fields": {
+      "row": "F",
+      "number": "11",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 77,
+    "fields": {
+      "row": "F",
+      "number": "12",
+      "seat_type": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 78,
+    "fields": {
+      "row": "F",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 79,
+    "fields": {
+      "row": "G",
+      "number": "1",
+      "seat_type": 2,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 80,
+    "fields": {
+      "row": "G",
+      "number": "2",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 81,
+    "fields": {
+      "row": "G",
+      "number": "3",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 82,
+    "fields": {
+      "row": "G",
+      "number": "4",
+      "seat_type": 3,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 83,
+    "fields": {
+      "row": "G",
+      "number": "5",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 84,
+    "fields": {
+      "row": "G",
+      "number": "6",
+      "seat_type": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 85,
+    "fields": {
+      "row": "G",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 86,
+    "fields": {
+      "row": "G",
+      "number": "8",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 87,
+    "fields": {
+      "row": "G",
+      "number": "9",
+      "seat_type": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 88,
+    "fields": {
+      "row": "G",
+      "number": "10",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 89,
+    "fields": {
+      "row": "G",
+      "number": "11",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 90,
+    "fields": {
+      "row": "G",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 91,
+    "fields": {
+      "row": "G",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 92,
+    "fields": {
+      "row": "H",
+      "number": "1",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 93,
+    "fields": {
+      "row": "H",
+      "number": "2",
+      "seat_type": 1,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 94,
+    "fields": {
+      "row": "H",
+      "number": "3",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 95,
+    "fields": {
+      "row": "H",
+      "number": "4",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 96,
+    "fields": {
+      "row": "H",
+      "number": "5",
+      "seat_type": 2,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 97,
+    "fields": {
+      "row": "H",
+      "number": "6",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 98,
+    "fields": {
+      "row": "H",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 99,
+    "fields": {
+      "row": "H",
+      "number": "8",
+      "seat_type": 3,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 100,
+    "fields": {
+      "row": "H",
+      "number": "9",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 101,
+    "fields": {
+      "row": "H",
+      "number": "10",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 102,
+    "fields": {
+      "row": "H",
+      "number": "11",
+      "seat_type": 1,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 103,
+    "fields": {
+      "row": "H",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 104,
+    "fields": {
+      "row": "H",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 105,
+    "fields": {
+      "row": "I",
+      "number": "1",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 106,
+    "fields": {
+      "row": "I",
+      "number": "2",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 107,
+    "fields": {
+      "row": "I",
+      "number": "3",
+      "seat_type": 2,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 108,
+    "fields": {
+      "row": "I",
+      "number": "4",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 109,
+    "fields": {
+      "row": "I",
+      "number": "5",
+      "seat_type": 1,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 110,
+    "fields": {
+      "row": "I",
+      "number": "6",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 111,
+    "fields": {
+      "row": "I",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 112,
+    "fields": {
+      "row": "I",
+      "number": "8",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 113,
+    "fields": {
+      "row": "I",
+      "number": "9",
+      "seat_type": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 114,
+    "fields": {
+      "row": "I",
+      "number": "10",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 115,
+    "fields": {
+      "row": "I",
+      "number": "11",
+      "seat_type": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 116,
+    "fields": {
+      "row": "I",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 117,
+    "fields": {
+      "row": "I",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 118,
+    "fields": {
+      "row": "J",
+      "number": "1",
+      "seat_type": 1,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 119,
+    "fields": {
+      "row": "J",
+      "number": "2",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 120,
+    "fields": {
+      "row": "J",
+      "number": "3",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 121,
+    "fields": {
+      "row": "J",
+      "number": "4",
+      "seat_type": 2,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 122,
+    "fields": {
+      "row": "J",
+      "number": "5",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 123,
+    "fields": {
+      "row": "J",
+      "number": "6",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 124,
+    "fields": {
+      "row": "J",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 125,
+    "fields": {
+      "row": "J",
+      "number": "8",
+      "seat_type": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 126,
+    "fields": {
+      "row": "J",
+      "number": "9",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 127,
+    "fields": {
+      "row": "J",
+      "number": "10",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 128,
+    "fields": {
+      "row": "J",
+      "number": "11",
+      "seat_type": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 129,
+    "fields": {
+      "row": "J",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 130,
+    "fields": {
+      "row": "J",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 131,
+    "fields": {
+      "row": "K",
+      "number": "1",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 132,
+    "fields": {
+      "row": "K",
+      "number": "2",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 133,
+    "fields": {
+      "row": "K",
+      "number": "3",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 134,
+    "fields": {
+      "row": "K",
+      "number": "4",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 135,
+    "fields": {
+      "row": "K",
+      "number": "5",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 136,
+    "fields": {
+      "row": "K",
+      "number": "6",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 137,
+    "fields": {
+      "row": "K",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 138,
+    "fields": {
+      "row": "K",
+      "number": "8",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 139,
+    "fields": {
+      "row": "K",
+      "number": "9",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 140,
+    "fields": {
+      "row": "K",
+      "number": "10",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 141,
+    "fields": {
+      "row": "K",
+      "number": "11",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 142,
+    "fields": {
+      "row": "K",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 143,
+    "fields": {
+      "row": "K",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 144,
+    "fields": {
+      "row": "L",
+      "number": "1",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 145,
+    "fields": {
+      "row": "L",
+      "number": "2",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 146,
+    "fields": {
+      "row": "L",
+      "number": "3",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 147,
+    "fields": {
+      "row": "L",
+      "number": "4",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 148,
+    "fields": {
+      "row": "L",
+      "number": "5",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 149,
+    "fields": {
+      "row": "L",
+      "number": "6",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 150,
+    "fields": {
+      "row": "L",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 151,
+    "fields": {
+      "row": "L",
+      "number": "8",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 152,
+    "fields": {
+      "row": "L",
+      "number": "9",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 153,
+    "fields": {
+      "row": "L",
+      "number": "10",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 154,
+    "fields": {
+      "row": "L",
+      "number": "11",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 155,
+    "fields": {
+      "row": "L",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 156,
+    "fields": {
+      "row": "L",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 157,
+    "fields": {
+      "row": "M",
+      "number": "1",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 158,
+    "fields": {
+      "row": "M",
+      "number": "2",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 159,
+    "fields": {
+      "row": "M",
+      "number": "3",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 160,
+    "fields": {
+      "row": "M",
+      "number": "4",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 161,
+    "fields": {
+      "row": "M",
+      "number": "5",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 162,
+    "fields": {
+      "row": "M",
+      "number": "6",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 163,
+    "fields": {
+      "row": "M",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 164,
+    "fields": {
+      "row": "M",
+      "number": "8",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 165,
+    "fields": {
+      "row": "M",
+      "number": "9",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 166,
+    "fields": {
+      "row": "M",
+      "number": "10",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 167,
+    "fields": {
+      "row": "M",
+      "number": "11",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 168,
+    "fields": {
+      "row": "M",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 169,
+    "fields": {
+      "row": "M",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 170,
+    "fields": {
+      "row": "N",
+      "number": "1",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 171,
+    "fields": {
+      "row": "N",
+      "number": "2",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 172,
+    "fields": {
+      "row": "N",
+      "number": "3",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 173,
+    "fields": {
+      "row": "N",
+      "number": "4",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 174,
+    "fields": {
+      "row": "N",
+      "number": "5",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 175,
+    "fields": {
+      "row": "N",
+      "number": "6",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 176,
+    "fields": {
+      "row": "N",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 177,
+    "fields": {
+      "row": "N",
+      "number": "8",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 178,
+    "fields": {
+      "row": "N",
+      "number": "9",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 179,
+    "fields": {
+      "row": "N",
+      "number": "10",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 180,
+    "fields": {
+      "row": "N",
+      "number": "11",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 181,
+    "fields": {
+      "row": "N",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 182,
+    "fields": {
+      "row": "N",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 183,
+    "fields": {
+      "row": "O",
+      "number": "1",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 184,
+    "fields": {
+      "row": "O",
+      "number": "2",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 185,
+    "fields": {
+      "row": "O",
+      "number": "3",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 186,
+    "fields": {
+      "row": "O",
+      "number": "4",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 187,
+    "fields": {
+      "row": "O",
+      "number": "5",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 188,
+    "fields": {
+      "row": "O",
+      "number": "6",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 189,
+    "fields": {
+      "row": "O",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 190,
+    "fields": {
+      "row": "O",
+      "number": "8",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 191,
+    "fields": {
+      "row": "O",
+      "number": "9",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 192,
+    "fields": {
+      "row": "O",
+      "number": "10",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 193,
+    "fields": {
+      "row": "O",
+      "number": "11",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 194,
+    "fields": {
+      "row": "O",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 195,
+    "fields": {
+      "row": "O",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 196,
+    "fields": {
+      "row": "P",
+      "number": "1",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 197,
+    "fields": {
+      "row": "P",
+      "number": "2",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 198,
+    "fields": {
+      "row": "P",
+      "number": "3",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 199,
+    "fields": {
+      "row": "P",
+      "number": "4",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 200,
+    "fields": {
+      "row": "P",
+      "number": "5",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 201,
+    "fields": {
+      "row": "P",
+      "number": "6",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 202,
+    "fields": {
+      "row": "P",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 203,
+    "fields": {
+      "row": "P",
+      "number": "8",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 204,
+    "fields": {
+      "row": "P",
+      "number": "9",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 205,
+    "fields": {
+      "row": "P",
+      "number": "10",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 206,
+    "fields": {
+      "row": "P",
+      "number": "11",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 207,
+    "fields": {
+      "row": "P",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 208,
+    "fields": {
+      "row": "P",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 209,
+    "fields": {
+      "row": "Q",
+      "number": "1",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 210,
+    "fields": {
+      "row": "Q",
+      "number": "2",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 211,
+    "fields": {
+      "row": "Q",
+      "number": "3",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 212,
+    "fields": {
+      "row": "Q",
+      "number": "4",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 213,
+    "fields": {
+      "row": "Q",
+      "number": "5",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 214,
+    "fields": {
+      "row": "Q",
+      "number": "6",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 215,
+    "fields": {
+      "row": "Q",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 216,
+    "fields": {
+      "row": "Q",
+      "number": "8",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 217,
+    "fields": {
+      "row": "Q",
+      "number": "9",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 218,
+    "fields": {
+      "row": "Q",
+      "number": "10",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 219,
+    "fields": {
+      "row": "Q",
+      "number": "11",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 220,
+    "fields": {
+      "row": "Q",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 221,
+    "fields": {
+      "row": "Q",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 222,
+    "fields": {
+      "row": "R",
+      "number": "1",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 223,
+    "fields": {
+      "row": "R",
+      "number": "2",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 224,
+    "fields": {
+      "row": "R",
+      "number": "3",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 225,
+    "fields": {
+      "row": "R",
+      "number": "4",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 226,
+    "fields": {
+      "row": "R",
+      "number": "5",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 227,
+    "fields": {
+      "row": "R",
+      "number": "6",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 228,
+    "fields": {
+      "row": "R",
+      "number": "7",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 229,
+    "fields": {
+      "row": "R",
+      "number": "8",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 230,
+    "fields": {
+      "row": "R",
+      "number": "9",
+      "seat_type": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 231,
+    "fields": {
+      "row": "R",
+      "number": "10",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 232,
+    "fields": {
+      "row": "R",
+      "number": "11",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 233,
+    "fields": {
+      "row": "R",
+      "number": "12",
+      "seat_type": 4,
+      "is_active": false
+    }
+  },
+  {
+    "model": "reservations.seat",
+    "pk": 234,
+    "fields": {
+      "row": "R",
+      "number": "13",
+      "seat_type": 4,
+      "is_active": false
     }
   }
 ]
