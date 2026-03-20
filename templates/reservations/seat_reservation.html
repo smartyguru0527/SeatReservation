@@ -2,7 +2,12 @@
 {% load static %}
 
 {% block content %}
-<style>.seat-layout { --reserved-seat-color: {{ reserved_seat_color|default:"#2563eb" }}; }</style>
+<style>
+    .seat-layout {
+        --reserved-seat-color: {{ reserved_seat_color|default:"#2563eb" }};
+        --selected-seat-color: {{ selected_seat_color|default:"#ef4444" }};
+    }
+</style>
 <div class="seat-layout">
     <!-- Left: Overall status + list -->
     <div class="left-col">
@@ -61,11 +66,11 @@
                 <div class="select-legend-section select-legend-section--status">
                     <div class="legend-status-row">
                         <span class="legend-status-label">Selected Seat</span>
-                        <span class="legend-dot legend-dot--single" style="background:#ef4444"></span>
+                        <span class="legend-dot legend-dot--single" style="background: var(--selected-seat-color, #ef4444)"></span>
                     </div>
                     <div class="legend-status-row">
                         <span class="legend-status-label">Reserved Seat</span>
-                        <span class="legend-dot legend-dot--single" style="background:#9ca3af"></span>
+                        <span class="legend-dot legend-dot--single" style="background: var(--reserved-seat-color, #2563eb)"></span>
                     </div>
                 </div>
             </div>
@@ -110,6 +115,55 @@
     var guestName = document.getElementById('guestName');
     var placeholder = document.getElementById('reservationFormPlaceholder');
     var formBox = document.getElementById('reservationFormBox');
+    // Seats use admin-defined colors; we render a subtle vertical gradient in the center grid.
+    // Supports hex colors like "#14b8a6". If parsing fails, falls back to the original color.
+    function hexToRgb(hex) {
+        if (!hex || typeof hex !== 'string') return null;
+        var h = hex.trim();
+        if (h[0] === '#') h = h.slice(1);
+        if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+        if (h.length !== 6) return null;
+        var r = parseInt(h.slice(0, 2), 16);
+        var g = parseInt(h.slice(2, 4), 16);
+        var b = parseInt(h.slice(4, 6), 16);
+        if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) return null;
+        return { r: r, g: g, b: b };
+    }
+
+    function rgbToHex(r, g, b) {
+        function clamp(n) { return Math.max(0, Math.min(255, Math.round(n))); }
+        var rr = clamp(r).toString(16).padStart(2, '0');
+        var gg = clamp(g).toString(16).padStart(2, '0');
+        var bb = clamp(b).toString(16).padStart(2, '0');
+        return '#' + rr + gg + bb;
+    }
+
+    function lightenHex(hex, amount) {
+        // amount: 0..1
+        var rgb = hexToRgb(hex);
+        if (!rgb) return null;
+        var a = Math.max(0, Math.min(1, amount));
+        return rgbToHex(
+            rgb.r + (255 - rgb.r) * a,
+            rgb.g + (255 - rgb.g) * a,
+            rgb.b + (255 - rgb.b) * a
+        );
+    }
+
+    function seatGradientBackground(hexColor) {
+        // Stronger contrast: higher amount => lighter top shade.
+        var top = lightenHex(hexColor, 0.5);
+        if (!top) return hexColor;
+        return 'linear-gradient(180deg, ' + top + ' 0%, ' + hexColor + ' 100%)';
+    }
+
+    function getCssVar(varName) {
+        var el = document.querySelector('.seat-layout');
+        if (!el) return '';
+        var val = window.getComputedStyle(el).getPropertyValue(varName);
+        return (val || '').trim();
+    }
+
     var selectedSeatId = null;
     var selectedZone = null;  // used when selectedRegion is null (block mode)
     var zoneSeatIds = {1: [], 2: [], 3: []};
@@ -195,6 +249,40 @@
     }
     window.onDateChange = onDateChange;
 
+    function renderReservationList(list) {
+        var tbody = document.getElementById('reservationListBody');
+        if (!tbody) return;
+        var safeList = list || [];
+        tbody.innerHTML = safeList.length === 0
+            ? '<tr><td colspan="4">No reservations found.</td></tr>'
+            : safeList.map(function(r) {
+                return '<tr><td>' + r.no + '</td><td>' + r.name + '</td><td>' + r.seat_info + '</td><td><button type="button" class="btn-check" data-seat-id="' + r.seat_id + '">Check Location</button></td></tr>';
+            }).join('');
+    }
+
+    function applyReservationSearch() {
+        var qEl = document.getElementById('searchName');
+        var q = qEl ? (qEl.value || '').trim().toLowerCase() : '';
+        var all = window.allReservations || [];
+        if (!q) {
+            renderReservationList(all);
+            return;
+        }
+        var filtered = all.filter(function(r) {
+            var name = (r.name || '').toString().toLowerCase();
+            var seatInfo = (r.seat_info || '').toString().toLowerCase();
+            var no = (r.no || '').toString().toLowerCase();
+            return name.indexOf(q) !== -1 || seatInfo.indexOf(q) !== -1 || no.indexOf(q) !== -1;
+        });
+        renderReservationList(filtered);
+    }
+
+    // Live-filter the "Overall Seat Reservation List" table.
+    var searchInput = document.getElementById('searchName');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() { applyReservationSearch(); });
+    }
+
     function loadSeatStatus() {
         var date = getDate();
         fetch('/api/seat-status/?date=' + encodeURIComponent(date))
@@ -203,12 +291,9 @@
                 document.getElementById('statTotal').textContent = data.total;
                 document.getElementById('statAvailable').textContent = data.available;
                 document.getElementById('statReserved').textContent = data.reserved;
-                var tbody = document.getElementById('reservationListBody');
-                tbody.innerHTML = data.reservations.length === 0
-                    ? '<tr><td colspan="4">No reservations for this date.</td></tr>'
-                    : data.reservations.map(function(r) {
-                        return '<tr><td>' + r.no + '</td><td>' + r.name + '</td><td>' + r.seat_info + '</td><td><button type="button" class="btn-check" data-seat-id="' + r.seat_id + '">Check Location</button></td></tr>';
-                    }).join('');
+                window.allReservations = data.reservations || [];
+                // Render immediately and keep it in sync with current search query.
+                applyReservationSearch();
                 window.reservedSeatIds = data.reserved_seat_ids || [];
                 window.blockConfigs = data.blocks || [];
                 loadSeatGrid();
@@ -227,6 +312,7 @@
                 var reserved = window.reservedSeatIds || [];
                 var activeZoneIds = zoneSeatIds[selectedZone] || [];
                 var blockConfigs = window.blockConfigs || [];
+                var reservedSeatColor = getCssVar('--reserved-seat-color') || '#2563eb';
 
                 // lookup for all seats
                 var byRowAll = {};
@@ -333,7 +419,10 @@
                                     cell.classList.add('reserved');
                                 } else {
                                     cell.classList.add('has-seat');
-                                    if (blockCfg && blockCfg.color) cell.style.background = blockCfg.color;
+                                    // Left mini-map should match center seat-type colors.
+                                    // (blockCfg.color is used only for layout frames, not seat colors)
+                                    if (seat.color) cell.style.background = seat.color;
+                                    else if (blockCfg && blockCfg.color) cell.style.background = blockCfg.color;
                                 }
                             }
                             if (selectedRegion && rowIdx >= selectedRegion.rowStart && rowIdx <= selectedRegion.rowEnd &&
@@ -375,9 +464,14 @@
                         } else {
                             cell.textContent = seat.label;
                             cell.dataset.seatId = seat.id;
-                            if (reserved.indexOf(seat.id) !== -1) cell.classList.add('reserved');
+                                if (reserved.indexOf(seat.id) !== -1) {
+                                    cell.classList.add('reserved');
+                                    cell.style.background = seatGradientBackground(reservedSeatColor);
+                                }
                             else {
                                 cell.classList.add('available');
+                                // Apply seat-type color with a gradient (center section only).
+                                if (seat.color) cell.style.background = seatGradientBackground(seat.color);
                                 cell.addEventListener('click', function() {
                                     document.querySelectorAll('.seat-cell.selected').forEach(function(cel) { cel.classList.remove('selected'); });
                                     this.classList.add('selected');
@@ -437,8 +531,10 @@
                             if (seat && seat.is_active) {
                                 if (reserved.indexOf(seat.id) !== -1) {
                                     cell.classList.add('reserved');
+                                    cell.style.background = 'var(--reserved-seat-color, #2563eb)';
                                 } else {
                                     cell.classList.add('has-seat');
+                                    if (seat.color) cell.style.background = seat.color;
                                 }
                             }
                             el.appendChild(cell);
