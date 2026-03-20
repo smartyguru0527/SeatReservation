@@ -41,6 +41,6 @@ class SeatBlockAdmin(admin.ModelAdmin):
 
 @admin.register(ReservationDisplaySetting)
 class ReservationDisplaySettingAdmin(admin.ModelAdmin):
-    list_display = ('id', 'reserved_seat_color')
+    list_display = ('id', 'reserved_seat_color', 'selected_seat_color')
     list_display_links = ('id',)
-    list_editable = ('reserved_seat_color',)
+    list_editable = ('reserved_seat_color', 'selected_seat_color')

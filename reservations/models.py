@@ -60,6 +60,11 @@ class ReservationDisplaySetting(models.Model):
         default='#2563eb',
         help_text='Background color for reserved seats in the seat grid and mini map',
     )
+    selected_seat_color = models.CharField(
+        max_length=20,
+        default='#ef4444',
+        help_text='Border color for the currently selected seat (used in the seat grid + legend)',
+    )
 
     class Meta:
         verbose_name = 'Reservation display setting'

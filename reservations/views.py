@@ -25,6 +25,7 @@ def seat_reservation(request):
         'last_update': _last_update(),
         'today': date.today(),
         'reserved_seat_color': (setting.reserved_seat_color if setting else '#2563eb'),
+        'selected_seat_color': (setting.selected_seat_color if setting else '#ef4444'),
     }
     return render(request, 'reservations/seat_reservation.html', context)
 
